@@ -11,6 +11,6 @@ public class HelloController {
     @GetMapping("/hello")
     public String hello() {
         log.info("HelloController: hello() method called");
-        return "Hello Spring Boot ! Welcome to coplit era";
+        return "Hello";
     }
 }
