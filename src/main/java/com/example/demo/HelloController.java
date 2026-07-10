@@ -10,6 +10,11 @@ import ch.qos.logback.classic.Logger;
 public class HelloController {
     Logger log = (Logger) LoggerFactory.getLogger(HelloController.class);
 
+    @GetMapping("/health")
+    public String health() {
+        return "UP";
+    }
+
     @GetMapping("/hello")
     public String hello() {
         log.info("Received request for /hello endpoint");
