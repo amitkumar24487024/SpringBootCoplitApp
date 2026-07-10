@@ -145,4 +145,4 @@ Verify deployment:
 gcloud run services describe $SERVICE --region $REGION --format='value(status.url)'
 ```
 
-Use the returned URL with `/health`, `/hello`, and `/greet`.
+Use the returned URL with `/health`, `/hello`, and `/greet` and so on
