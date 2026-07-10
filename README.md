@@ -53,6 +53,14 @@ On Windows:
 
 ## API
 
+### GET /health
+
+Returns:
+
+```text
+UP
+```
+
 ### GET /hello
 
 Returns:
@@ -67,4 +75,74 @@ Application name:
 
 ```properties
 spring.application.name=SpringBootCoplitApp
+server.port=${PORT:8080}
 ```
+
+## Docker
+
+Build image locally:
+
+```powershell
+docker build -t springbootcoplitapp:local .
+```
+
+Run image locally:
+
+```powershell
+docker run --rm -p 8080:8080 -e PORT=8080 springbootcoplitapp:local
+```
+
+## Deploy To Google Cloud Run
+
+Set variables:
+
+```powershell
+$PROJECT_ID="your-gcp-project-id"
+$REGION="us-central1"
+$REPO="springbootcoplitapp"
+$SERVICE="springbootcoplitapp"
+$IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/$REPO/$SERVICE:latest"
+```
+
+Enable APIs:
+
+```powershell
+gcloud services enable run.googleapis.com artifactregistry.googleapis.com cloudbuild.googleapis.com
+```
+
+Create Artifact Registry repository (first time only):
+
+```powershell
+gcloud artifacts repositories create $REPO --repository-format=docker --location=$REGION
+```
+
+Build and push image:
+
+```powershell
+gcloud builds submit --tag $IMAGE
+```
+
+Deploy service (public access with recommended defaults):
+
+```powershell
+gcloud run deploy $SERVICE \
+	--image $IMAGE \
+	--platform managed \
+	--region $REGION \
+	--allow-unauthenticated \
+	--port 8080 \
+	--cpu 1 \
+	--memory 512Mi \
+	--concurrency 80 \
+	--timeout 300 \
+	--min-instances 0 \
+	--max-instances 3
+```
+
+Verify deployment:
+
+```powershell
+gcloud run services describe $SERVICE --region $REGION --format='value(status.url)'
+```
+
+Use the returned URL with `/health`, `/hello`, and `/greet`.
