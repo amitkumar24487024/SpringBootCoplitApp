@@ -1,16 +1,24 @@
 package com.example.demo;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import lombok.extern.slf4j.Slf4j;
+
+import ch.qos.logback.classic.Logger;
 
 @RestController
-@Slf4j
 public class HelloController {
+    Logger log = (Logger) LoggerFactory.getLogger(HelloController.class);
 
     @GetMapping("/hello")
     public String hello() {
-        log.info("HelloController: hello() method called");
+        log.info("Received request for /hello endpoint");
         return "Hello";
+    }
+
+    @GetMapping("/greet")
+    public String greet() {
+        log.info("Received request for /greet endpoint");
+        return "Greetings!";
     }
 }
