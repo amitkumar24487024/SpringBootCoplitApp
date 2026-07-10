@@ -24,6 +24,6 @@ public class HelloController {
     @GetMapping("/greet")
     public String greet() {
         log.info("Received request for /greet endpoint");
-        return "Greetings from SpringBootCoplitApp!";
+        return "Greetings from SpringBoot!";
     }
 }
